@@ -27,4 +27,4 @@ Since Fun Translations API allows only 5 requests per hour, some tests may fail 
 * Swagger documentation is publicly available, however, if in the future we limit the access to our app in production, it is better to hide the documentation and endpoints from the general public and protect everything with authentication.
 * Currently, the app is published on the Heroku cloud platform, but for production, I would consider using something more sophisticated, like AWS or Azure.
 * I would acquire a paid Fun Translations API subscription for production.
-* It is a good practice to remove the information about the server in the response headers, so for prod it is better to remove the "server" header
+* It is a good practice to remove the information about the server in the response headers, so for prod it is better to remove the "server" header.
