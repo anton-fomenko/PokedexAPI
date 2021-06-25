@@ -12,7 +12,7 @@ Swagger documentation: https://pokedex-api-1.herokuapp.com/swagger/index.html
 
 ## How to run tests?
 1) Download and install Visual Studio: https://visualstudio.microsoft.com/downloads/
-2) Open the Pokedex.API.sln in the repository.
+2) Open the PokedexAPI.sln in the repository.
 3) Click Test -> Test Explorer on the menu bar.
 4) In Test Explorer select tests you want to run and start them. 
 
