@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using PokeApiNet;
@@ -17,14 +18,16 @@ namespace Pokedex.API.UnitTests
     {
         private Mock<IPokeClient> _pokeClientMock;
         private Mock<ITranslatorClient> _translatorClientMock;
-        private Mock<ITextHelper> _textHelper;
+        private Mock<ITextHelper> _textHelperMock;
+        private Mock<ILogger> _loggerMock;
 
         [SetUp]
         public void Setup()
         {
             _pokeClientMock = new Mock<IPokeClient>();
             _translatorClientMock = new Mock<ITranslatorClient>();
-            _textHelper = new Mock<ITextHelper>();
+            _textHelperMock = new Mock<ITextHelper>();
+            _loggerMock = new Mock<ILogger>();
 
             Pokemon pokemon = new Pokemon()
             {
@@ -40,7 +43,9 @@ namespace Pokedex.API.UnitTests
         {
             // Arrange
             SetupSpeciesMock(isLegendary: true, habitat: Habitats.Fire);
-            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object, _translatorClientMock.Object, _textHelper.Object);
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object, 
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
 
             // Act
             PokemonResource pokemonResource = await pokemonService.Get("ho-oh");
@@ -54,7 +59,9 @@ namespace Pokedex.API.UnitTests
         {
             // Arrange
             SetupSpeciesMock(isLegendary: false, habitat: Habitats.Cave);
-            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object, _translatorClientMock.Object, _textHelper.Object);
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
 
             // Act
             PokemonResource pokemonResource = await pokemonService.Get("ho-oh");
@@ -68,7 +75,9 @@ namespace Pokedex.API.UnitTests
         {
             // Arrange
             SetupSpeciesMock(isLegendary: true, habitat: Habitats.Fire);
-            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object, _translatorClientMock.Object, _textHelper.Object);
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
 
             // Act
             await pokemonService.GetTranslatedAsync("ho-oh");
@@ -82,7 +91,9 @@ namespace Pokedex.API.UnitTests
         {
             // Arrange
             SetupSpeciesMock(isLegendary: false, habitat: Habitats.Cave);
-            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object, _translatorClientMock.Object, _textHelper.Object);
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
 
             // Act
             await pokemonService.GetTranslatedAsync("ho-oh");
@@ -96,7 +107,9 @@ namespace Pokedex.API.UnitTests
         {
             // Arrange
             SetupSpeciesMock(isLegendary: false, habitat: Habitats.Fire);
-            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object, _translatorClientMock.Object, _textHelper.Object);
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
 
             // Act
             await pokemonService.GetTranslatedAsync("ho-oh");
@@ -112,8 +125,10 @@ namespace Pokedex.API.UnitTests
             string description = "This Pokemon is a fire-type Pokemon and closely resembles an elk. It has lava stone legs, a smoldering snout and pointy ears.";
             SetupSpeciesMock(isLegendary: false, habitat: Habitats.Fire);
             _translatorClientMock.Setup(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception());
-            _textHelper.Setup(x => x.Fix(It.IsAny<string>())).Returns(description);
-            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object, _translatorClientMock.Object, _textHelper.Object);
+            _textHelperMock.Setup(x => x.Fix(It.IsAny<string>())).Returns(description);
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
 
             // Act
             PokemonResource pokemonResource = await pokemonService.GetTranslatedAsync("ho-oh");
