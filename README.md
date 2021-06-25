@@ -5,7 +5,7 @@ Swagger documentation: https://pokedex-api-1.herokuapp.com/swagger/index.html
 ## How to run locally?
 1) Clone the repository.
 1) Install Docker: https://docs.docker.com/get-docker/
-2) In the console go to Pokedex/Pokedex.API folder
+2) In the console go to PokedexAPI/Pokedex.API folder
 3) Build an image with tag pokedex: "docker build -t pokedex ."
 4) Start the container: "docker run -p 5000:80 pokedex"
 5) Visit the following address in the browser: http://localhost:5000/swagger/index.html
