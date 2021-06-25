@@ -8,6 +8,7 @@ namespace Pokedex.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ResponseCache(Duration = 60)]
     public class PokemonController : ControllerBase
     {
         private readonly IPokemonService _pokemonService;

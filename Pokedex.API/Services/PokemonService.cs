@@ -16,13 +16,13 @@ namespace Pokedex.API.Services
         private readonly IPokeClient _pokeClient;
         private readonly ITranslatorClient _translatorClient;
         private readonly ITextHelper _textHelper;
-        private readonly ILogger<PokemonService> _logger;
+        private readonly ILogger<IPokemonService> _logger;
 
         public PokemonService(
             IPokeClient pokeClient,
             ITranslatorClient translatorClient,
             ITextHelper textHelper,
-            ILogger<PokemonService> logger)
+            ILogger<IPokemonService> logger)
         {
             _pokeClient = pokeClient;
             _translatorClient = translatorClient;

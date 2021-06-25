@@ -19,7 +19,7 @@ namespace Pokedex.API.UnitTests
         private Mock<IPokeClient> _pokeClientMock;
         private Mock<ITranslatorClient> _translatorClientMock;
         private Mock<ITextHelper> _textHelperMock;
-        private Mock<ILogger> _loggerMock;
+        private Mock<ILogger<IPokemonService>> _loggerMock;
 
         [SetUp]
         public void Setup()
@@ -27,7 +27,7 @@ namespace Pokedex.API.UnitTests
             _pokeClientMock = new Mock<IPokeClient>();
             _translatorClientMock = new Mock<ITranslatorClient>();
             _textHelperMock = new Mock<ITextHelper>();
-            _loggerMock = new Mock<ILogger>();
+            _loggerMock = new Mock<ILogger<IPokemonService>>();
 
             Pokemon pokemon = new Pokemon()
             {

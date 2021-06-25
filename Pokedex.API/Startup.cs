@@ -30,6 +30,7 @@ namespace Pokedex.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pokedex.API", Version = "v1" });
             });
 
+            services.AddResponseCaching();
             services.AddHttpClient();
             services.AddSingleton<PokeApiClient>();
             services.AddSingleton<IPokeClient, PokeClient>();
@@ -52,6 +53,8 @@ namespace Pokedex.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseResponseCaching();
 
             app.UseAuthorization();
 
