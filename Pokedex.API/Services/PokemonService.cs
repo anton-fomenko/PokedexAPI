@@ -1,6 +1,7 @@
 ﻿using PokeApiNet;
 using Pokedex.API.Clients;
 using Pokedex.API.Constants;
+using Pokedex.API.Helpers;
 using Pokedex.API.Resources;
 using System;
 using System.Linq;
@@ -12,6 +13,18 @@ namespace Pokedex.API.Services
     public class PokemonService : IPokemonService
     {
         private readonly IPokeClient _pokeClient;
+        private readonly ITranslatorClient _translatorClient;
+        private readonly ITextHelper _textHelper;
+
+        public PokemonService(
+            IPokeClient pokeClient,
+            ITranslatorClient translatorClient,
+            ITextHelper textHelper)
+        {
+            _pokeClient = pokeClient;
+            _translatorClient = translatorClient;
+            _textHelper = textHelper;
+        }
 
         public async Task<PokemonResource> Get(string name)
         {
@@ -28,6 +41,7 @@ namespace Pokedex.API.Services
 
             PokemonSpecies species = await _pokeClient.GetResourceAsync<PokemonSpecies>(pokemon.Species.Name);
             string description = species.FlavorTextEntries.FirstOrDefault(text => text.Language.Name == Languages.English)?.FlavorText;
+            description = _textHelper.Fix(description);
 
             PokemonResource res = new PokemonResource
             {
