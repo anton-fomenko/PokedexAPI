@@ -19,4 +19,4 @@ RUN dotnet publish "Pokedex.API.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Pokedex.API.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet Pokedex.API.dll
