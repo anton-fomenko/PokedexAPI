@@ -30,7 +30,7 @@ namespace Pokedex.API.Services
             _logger = logger;
         }
 
-        public async Task<PokemonResource> Get(string name)
+        public async Task<PokemonResource> GetAsync(string name)
         {
             Pokemon pokemon = null;
 

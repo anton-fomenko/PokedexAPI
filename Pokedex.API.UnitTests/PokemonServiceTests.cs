@@ -48,7 +48,7 @@ namespace Pokedex.API.UnitTests
                 _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
 
             // Act
-            PokemonResource pokemonResource = await pokemonService.Get("ho-oh");
+            PokemonResource pokemonResource = await pokemonService.GetAsync("ho-oh");
 
             // Assert
             _translatorClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
@@ -64,7 +64,7 @@ namespace Pokedex.API.UnitTests
                 _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
 
             // Act
-            PokemonResource pokemonResource = await pokemonService.Get("ho-oh");
+            PokemonResource pokemonResource = await pokemonService.GetAsync("ho-oh");
 
             // Assert
             _translatorClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);

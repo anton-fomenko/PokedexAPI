@@ -24,7 +24,7 @@ namespace Pokedex.API.Controllers
         [ProducesResponseType(typeof(PokemonResource), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<PokemonResource>> Get(string name)
         {
-            PokemonResource res = await _pokemonService.Get(name);
+            PokemonResource res = await _pokemonService.GetAsync(name);
 
             if (res != null)
                 return res;
