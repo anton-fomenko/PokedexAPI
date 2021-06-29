@@ -21,7 +21,7 @@ namespace Pokedex.API.Controllers
         [HttpGet]
         [Route("{name}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(PokemonResource), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<PokemonResource>> Get(string name)
         {
             PokemonResource res = await _pokemonService.GetAsync(name);
@@ -35,7 +35,7 @@ namespace Pokedex.API.Controllers
         [HttpGet]
         [Route("translated/{name}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(PokemonResource), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<PokemonResource>> GetTranslated(string name)
         {
             PokemonResource res = await _pokemonService.GetTranslatedAsync(name);
