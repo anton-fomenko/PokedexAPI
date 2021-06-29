@@ -9,6 +9,8 @@ using Pokedex.API.Resources;
 using Pokedex.API.Services;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Pokedex.API.UnitTests
@@ -68,6 +70,42 @@ namespace Pokedex.API.UnitTests
 
             // Assert
             _translatorClientMock.Verify(x => x.TranslateAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public void Get_PokeApiInternalErrorHappens_HttpRequestExceptionThrown()
+        {
+            // Arrange
+            _pokeClientMock
+                .Setup(c => c.GetResourceAsync<Pokemon>(It.IsAny<string>()))
+                .Throws(new HttpRequestException(null, null, HttpStatusCode.InternalServerError));
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
+
+            // Act and Assert
+            Assert.ThrowsAsync(typeof(HttpRequestException), async () =>
+            {
+                await pokemonService.GetAsync("ho-oh");
+            });
+        }
+
+        [Test]
+        public async Task Get_PokeApiReturnsNotFound_ReturnNull()
+        {
+            // Arrange
+            _pokeClientMock
+                .Setup(c => c.GetResourceAsync<Pokemon>(It.IsAny<string>()))
+                .Throws(new HttpRequestException(null, null, HttpStatusCode.NotFound));
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
+
+            // Act
+            PokemonResource res = await pokemonService.GetAsync("ho-oh");
+
+            // Assert
+            Assert.Null(res);
         }
 
         [Test]
@@ -135,6 +173,42 @@ namespace Pokedex.API.UnitTests
 
             // Assert
             Assert.AreEqual(description, pokemonResource.Description);
+        }
+
+        [Test]
+        public void GetTranslated_PokeApiInternalErrorHappens_HttpRequestExceptionThrown()
+        {
+            // Arrange
+            _pokeClientMock
+                .Setup(c => c.GetResourceAsync<Pokemon>(It.IsAny<string>()))
+                .Throws(new HttpRequestException(null, null, HttpStatusCode.InternalServerError));
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
+
+            // Act and Assert
+            Assert.ThrowsAsync(typeof(HttpRequestException), async () =>
+            {
+                await pokemonService.GetTranslatedAsync("ho-oh");
+            });
+        }
+
+        [Test]
+        public async Task GetTranslated_PokeApiReturnsNotFound_ReturnNull()
+        {
+            // Arrange
+            _pokeClientMock
+                .Setup(c => c.GetResourceAsync<Pokemon>(It.IsAny<string>()))
+                .Throws(new HttpRequestException(null, null, HttpStatusCode.NotFound));
+
+            IPokemonService pokemonService = new PokemonService(_pokeClientMock.Object,
+                _translatorClientMock.Object, _textHelperMock.Object, _loggerMock.Object);
+
+            // Act
+            PokemonResource res = await pokemonService.GetTranslatedAsync("ho-oh");
+
+            // Assert
+            Assert.Null(res);
         }
 
         private void SetupSpeciesMock(bool isLegendary, string habitat)

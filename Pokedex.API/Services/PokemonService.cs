@@ -6,6 +6,7 @@ using Pokedex.API.Helpers;
 using Pokedex.API.Resources;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -32,16 +33,12 @@ namespace Pokedex.API.Services
 
         public async Task<PokemonResource> GetAsync(string name)
         {
-            Pokemon pokemon = null;
+            Pokemon pokemon = await TryGetPokemonAsync(name);
 
-            try
-            {
-                pokemon = await _pokeClient.GetResourceAsync<Pokemon>(name);
-            }
-            catch (HttpRequestException)
+            if (pokemon == null)
             {
                 return null;
-            }
+            }      
 
             PokemonSpecies species = await _pokeClient.GetResourceAsync<PokemonSpecies>(pokemon.Species.Name);
             string description = species.FlavorTextEntries.FirstOrDefault(text => text.Language.Name == Languages.English)?.FlavorText;
@@ -60,16 +57,13 @@ namespace Pokedex.API.Services
 
         public async Task<PokemonResource> GetTranslatedAsync(string name)
         {
-            Pokemon pokemon = null;
+            Pokemon pokemon = await TryGetPokemonAsync(name);
 
-            try
-            {
-                pokemon = await _pokeClient.GetResourceAsync<Pokemon>(name);
-            }
-            catch (HttpRequestException)
+            if (pokemon == null)
             {
                 return null;
             }
+
             PokemonSpecies species = await _pokeClient.GetResourceAsync<PokemonSpecies>(pokemon.Species.Name);
             string description = species.FlavorTextEntries.FirstOrDefault(text => text.Language.Name == Languages.English)?.FlavorText;
             description = _textHelper.Fix(description);
@@ -89,6 +83,23 @@ namespace Pokedex.API.Services
             };
 
             return res;
+        }
+
+        private async Task<Pokemon> TryGetPokemonAsync(string name)
+        {
+            try
+            {
+                return await _pokeClient.GetResourceAsync<Pokemon>(name);
+            }
+            catch (HttpRequestException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                throw;
+            }     
         }
 
         private async Task<string> TranslateDescriptionAsync(
